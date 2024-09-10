@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { JwtRefreshStrategy } from './infrastructure/auth/jwt-refresh.strategy';
 
 import { AuthController } from './presentation/controllers/auth.controller';
 import { AuthService } from './application/services/auth.service';
@@ -33,7 +34,7 @@ import { User } from './core/domain/entities/user.entity';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.get<string>('JWT_ACCESS_SECRET'),
         signOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
@@ -43,6 +44,7 @@ import { User } from './core/domain/entities/user.entity';
   providers: [
     AuthService,
     JwtStrategy,
+    JwtRefreshStrategy,
     JwtAuthService,
     {
       provide: 'IUserRepository',

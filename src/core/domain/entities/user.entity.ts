@@ -15,6 +15,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  refreshToken: string;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
@@ -22,5 +25,13 @@ export class User {
 
   async comparePassword(attempt: string): Promise<boolean> {
     return bcrypt.compare(attempt, this.password);
+  }
+
+  async setRefreshToken(token: string) {
+    this.refreshToken = await bcrypt.hash(token, 10);
+  }
+
+  async compareRefreshToken(token: string): Promise<boolean> {
+    return bcrypt.compare(token, this.refreshToken);
   }
 }
