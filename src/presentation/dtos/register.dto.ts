@@ -1,22 +1,33 @@
-import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, MinLength, MaxLength, Matches, IsOptional } from 'class-validator';
 
 export class RegisterDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(20)
-  username: string;
-
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Некорректный формат email' })
+  @IsNotEmpty({ message: 'Email - обязательное поле' })
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Пароль - обязательное поле' })
   @MinLength(6)
   @MaxLength(30)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Password is too weak',
+    message: 'Слишком легкий пароль',
   })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  firstName?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  lastName?: string;
+
+  @IsString()
+  @IsOptional()
+  @Matches(/^(\+7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/, {
+    message: 'Некорректный формат телефона',
+  })
+  phone?: string;
 }

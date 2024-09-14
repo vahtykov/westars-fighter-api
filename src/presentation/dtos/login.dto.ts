@@ -1,11 +1,9 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, MinLength, MaxLength, IsEmail } from 'class-validator';
 
 export class LoginDto {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(20)
-  username: string;
+  @IsEmail({}, { message: 'Некорректный формат email' })
+  @IsNotEmpty({ message: 'Email - обязательное поле' })
+  email: string;
 
   @IsString()
   @IsNotEmpty()

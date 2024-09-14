@@ -13,8 +13,8 @@ export class AuthService {
     private userRepository: IUserRepository
   ) {}
 
-  async validateUser(username: string, password: string): Promise<User | null> {
-    const user = await this.userRepository.findByUsername(username);
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.userRepository.findByEmail(email);
     if (user && await user.comparePassword(password)) {
       return user;
     }
@@ -22,31 +22,27 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.validateUser(loginDto.username, loginDto.password);
+    const user = await this.validateUser(loginDto.email, loginDto.password);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Неверный логин или пароль');
     }
     return this.generateTokens(user);
   }
 
   async register(registerDto: RegisterDto) {
-    // Check if username already exists
-    const existingUsername = await this.userRepository.findByUsername(registerDto.username);
-    if (existingUsername) {
-      throw new ConflictException('Username already exists');
-    }
-
     // Check if email already exists
     const existingEmail = await this.userRepository.findByEmail(registerDto.email);
     if (existingEmail) {
-      throw new ConflictException('Email already in use');
+      throw new ConflictException('Email уже занят');
     }
 
     // Create new user
     const newUser = new User();
-    newUser.username = registerDto.username;
     newUser.email = registerDto.email;
     newUser.password = registerDto.password;
+    newUser.firstName = registerDto.firstName;
+    newUser.lastName = registerDto.lastName;
+    newUser.phone = registerDto.phone;
 
     const savedUser = await this.userRepository.create(newUser);
     return this.generateTokens(savedUser);
@@ -55,19 +51,19 @@ export class AuthService {
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.userRepository.findById(userId);
     if (!user || !user.refreshToken) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Неверный refresh token');
     }
 
     const refreshTokenMatches = await user.compareRefreshToken(refreshToken);
     if (!refreshTokenMatches) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Неверный refresh token');
     }
 
     return this.generateTokens(user);
   }
 
   private async generateTokens(user: User) {
-    const payload = { username: user.username, sub: user.id };
+    const payload = { email: user.email, sub: user.id };
     const tokens = await this.jwtAuthService.generateTokens(payload);
     await user.setRefreshToken(tokens.refreshToken);
     await this.userRepository.save(user);
