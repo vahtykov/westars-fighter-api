@@ -25,7 +25,7 @@ import { User } from './core/domain/entities/user.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [User],
-        synchronize: true, // set to false in production
+        synchronize: configService.get('NODE_ENV') !== 'development' ? false : configService.get('DEV_SYNC_MODELS'), // set to false in production
       }),
       inject: [ConfigService],
     }),
