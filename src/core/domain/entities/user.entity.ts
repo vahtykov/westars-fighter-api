@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { File } from './file.entity';
 
 @Entity()
 export class User {
@@ -32,6 +33,9 @@ export class User {
 
   @Column({ nullable: true })
   refreshToken: string;
+
+  // @OneToMany('File', 'user')
+  // files: File[];
 
   @BeforeInsert()
   async hashPassword() {
