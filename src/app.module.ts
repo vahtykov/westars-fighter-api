@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtRefreshStrategy } from './infrastructure/auth/jwt-refresh.strategy';
@@ -10,31 +9,17 @@ import { AuthService } from './application/services/auth.service';
 import { JwtStrategy } from './infrastructure/auth/jwt.strategy';
 import { JwtAuthService } from './infrastructure/auth/jwt.service';
 import { UserRepository } from './core/repositories/user.repository';
-import { User } from './core/domain/entities/user.entity';
 import { UserController } from './presentation/controllers/user.controller';
 import { UserService } from './application/services/user.service';
 import { FileUploadController } from './presentation/controllers/file-upload.controller';
 import { S3Service } from './infrastructure/external-services/s3.service';
 import { FileRepository } from './core/repositories/file.repository';
+import { PostgresModule } from './infrastructure/database/datasource/postgres.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: +configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [User, File],
-        synchronize: configService.get('NODE_ENV') !== 'development' ? false : configService.get('DEV_SYNC_MODELS'), // set to false in production
-      }),
-      inject: [ConfigService],
-    }),
-    TypeOrmModule.forFeature([User, File]),
+    PostgresModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

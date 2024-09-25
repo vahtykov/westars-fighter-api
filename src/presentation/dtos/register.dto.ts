@@ -7,11 +7,11 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty({ message: 'Пароль - обязательное поле' })
-  @MinLength(6)
-  @MaxLength(30)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Слишком легкий пароль',
-  })
+  @MinLength(6, { message: 'Пароль должен быть не менее 6 символов' })
+  @MaxLength(30, { message: 'Пароль должен быть не более 30 символов' })
+  // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  //   message: 'Слишком легкий пароль',
+  // })
   password: string;
 
   @IsString()

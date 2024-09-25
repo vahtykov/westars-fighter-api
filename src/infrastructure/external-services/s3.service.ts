@@ -20,24 +20,24 @@ export class S3Service {
     });
   }
 
-  async uploadFile(file: Buffer, fileName: string, bucketName: string): Promise<{url: string, key: string, size: number}> {
+  async uploadFile(file: Buffer, filePath: string, bucketName: string): Promise<{url: string, key: string, size: number}> {
     const minifiedFile = await this.minifyImage(file);
 
-    const key = `${Date.now()}-${fileName}`;
+    const key = `${Date.now()}-${filePath}`;
     const upload = new Upload({
       client: this.s3Client,
       params: {
         Bucket: bucketName,
-        Key: fileName,
+        Key: filePath,
         Body: minifiedFile,
-        ContentType: this.getContentType(fileName),
+        ContentType: this.getContentType(filePath),
       },
     });
 
     await upload.done();
 
     return {
-      url: `https://${bucketName}.${process.env.S3_HOST}/${fileName}`,
+      url: `https://${bucketName}.${process.env.S3_HOST}/${filePath}`,
       key: key,
       size: minifiedFile.length
     };

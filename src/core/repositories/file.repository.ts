@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common'; 
+import { DataSource, Repository } from 'typeorm';
 import { File } from '../../core/domain/entities/file.entity';
 
 @Injectable()
 export class FileRepository {
+  private fileRepository: Repository<File>;
+
   constructor(
-    @InjectRepository(File)
-    private fileRepository: Repository<File>,
-  ) {}
+    @Inject(DataSource) private dataSource: DataSource
+  ) {
+    this.fileRepository = this.dataSource.getRepository(File);
+  }
 
   async create(fileData: Partial<File>): Promise<File> {
     const file = this.fileRepository.create(fileData);

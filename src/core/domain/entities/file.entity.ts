@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, BaseEntity } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity()
+@Entity('files')
 export class File extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

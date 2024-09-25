@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from 
 import * as bcrypt from 'bcrypt';
 import { File } from './file.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -34,8 +34,8 @@ export class User {
   @Column({ nullable: true })
   refreshToken: string;
 
-  // @OneToMany('File', 'user')
-  // files: File[];
+  @OneToMany('File', 'user')
+  files: File[];
 
   @BeforeInsert()
   async hashPassword() {

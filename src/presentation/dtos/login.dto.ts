@@ -6,8 +6,8 @@ export class LoginDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(6)
-  @MaxLength(30)
+  @IsNotEmpty({ message: 'Пароль - обязательное поле' })
+  @MinLength(6, { message: 'Пароль должен быть не менее 6 символов' })
+  @MaxLength(30, { message: 'Пароль должен быть не более 30 символов' })
   password: string;
 }
