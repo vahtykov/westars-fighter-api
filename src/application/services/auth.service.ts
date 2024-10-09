@@ -70,11 +70,39 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
+  async verifyAndRefreshTokens(userId: string, accessToken: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    try {
+      // Attempt to verify the current access token
+      await this.jwtAuthService.verifyAccessToken(accessToken);
+      // If successful, return the current user without generating new tokens
+      return { user: this.sanitizeUser(user) };
+    } catch (error) {
+      // If the token is expired, generate new tokens
+      const tokens = await this.generateTokens(user);
+      return {
+        user: this.sanitizeUser(user),
+        ...tokens
+      };
+    }
+  }
+
   private async generateTokens(user: User) {
     const payload = { email: user.email, sub: user.id };
     const tokens = await this.jwtAuthService.generateTokens(payload);
     await user.setRefreshToken(tokens.refreshToken);
+    user.lastActivityAt = new Date();
     await this.userRepository.save(user);
+
     return tokens;
+  }
+
+  private sanitizeUser(user: User) {
+    const { refreshToken, ...sanitizedUser } = user;
+    return sanitizedUser;
   }
 }

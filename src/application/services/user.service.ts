@@ -10,12 +10,12 @@ export class UserService {
     private userRepository: IUserRepository
   ) {}
 
-  async getUserById(userId: string): Promise<User> {
+  async getUserById(userId: string): Promise<Partial<User>> {
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return this.sanitizeUser(user);
   }
 
   async updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -29,5 +29,24 @@ export class UserService {
       birthDate: updateUserDto.birthDate ? new Date(updateUserDto.birthDate) : null,
     });
     return updatedUser;
+  }
+
+  async isUserActive(userId: string): Promise<boolean> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      return false;
+    }
+    // Check if the user has been active within the last 360 days
+    const thirtyDaysAgo = new Date(Date.now() - 360 * 24 * 60 * 60 * 1000);
+    return user.lastActivityAt > thirtyDaysAgo;
+  }
+
+  async updateLastActivity(userId: string): Promise<void> {
+    await this.userRepository.update(userId, { lastActivityAt: new Date() });
+  }
+
+  private sanitizeUser(user: User): Partial<User> {
+    const { refreshToken, ...sanitizedUser } = user;
+    return sanitizedUser;
   }
 }

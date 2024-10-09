@@ -24,7 +24,7 @@ export class File extends BaseEntity {
   @Column()
   url: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   uploadedAt: Date;
 
   @ManyToOne('User', 'files')

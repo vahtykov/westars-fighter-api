@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { File } from './file.entity';
 
@@ -24,6 +24,15 @@ export class User {
 
   @Column({ nullable: true, type: 'date' })
   birthDate: Date;
+
+  @Column({ nullable: true, type: 'timestamp with time zone' })
+  lastActivityAt: Date;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 
   @Column({ nullable: true, length: 500 })
   aboutText: string;

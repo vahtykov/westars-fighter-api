@@ -16,6 +16,10 @@ import { S3Service } from './infrastructure/external-services/s3.service';
 import { FileRepository } from './core/repositories/file.repository';
 import { PostgresModule } from './infrastructure/database/datasource/postgres.module';
 
+import { TrainingController } from './presentation/controllers/training.controller';
+import { TrainingService } from './application/services/training.service';
+import { TrainingRepository } from './core/repositories/training.repository';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -30,10 +34,11 @@ import { PostgresModule } from './infrastructure/database/datasource/postgres.mo
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, UserController, FileUploadController],
+  controllers: [AuthController, UserController, FileUploadController, TrainingController],
   providers: [
     AuthService,
     UserService,
+    TrainingService,
     S3Service,
     FileRepository,
     JwtStrategy,
@@ -42,6 +47,10 @@ import { PostgresModule } from './infrastructure/database/datasource/postgres.mo
     {
       provide: 'IUserRepository',
       useClass: UserRepository,
+    },
+    {
+      provide: 'ITrainingRepository',
+      useClass: TrainingRepository,
     },
   ],
 })

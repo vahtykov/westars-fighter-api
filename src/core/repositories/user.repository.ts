@@ -25,6 +25,7 @@ export class UserRepository implements IUserRepository {
         avatarUrl: true,
         birthDate: true,
         aboutText: true,
+        lastActivityAt: true,
       },
     });
   }
@@ -41,6 +42,7 @@ export class UserRepository implements IUserRepository {
         avatarUrl: true,
         birthDate: true,
         aboutText: true,
+        lastActivityAt: true,
       } : {},
     });
   }
