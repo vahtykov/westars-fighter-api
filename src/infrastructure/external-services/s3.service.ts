@@ -1,4 +1,4 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { Injectable } from '@nestjs/common';
 const imagemin = require('imagemin');
@@ -64,6 +64,20 @@ export class S3Service {
         return 'image/png';
       default:
         return 'application/octet-stream';
+    }
+  }
+
+  async deleteFile(bucketName: string, key: string): Promise<void> {
+    const command = new DeleteObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+
+    try {
+      await this.s3Client.send(command);
+    } catch (error) {
+      console.error('Error deleting file from S3:', error);
+      throw new Error('Failed to delete file from S3');
     }
   }
 }

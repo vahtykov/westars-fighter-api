@@ -19,6 +19,7 @@ import { PostgresModule } from './infrastructure/database/datasource/postgres.mo
 import { TrainingController } from './presentation/controllers/training.controller';
 import { TrainingService } from './application/services/training.service';
 import { TrainingRepository } from './core/repositories/training.repository';
+import { TrainingLevelRepository } from './core/repositories/training-level.repository';
 
 @Module({
   imports: [
@@ -51,6 +52,10 @@ import { TrainingRepository } from './core/repositories/training.repository';
     {
       provide: 'ITrainingRepository',
       useClass: TrainingRepository,
+    },
+    {
+      provide: 'ITrainingLevelRepository',
+      useClass: TrainingLevelRepository,
     },
   ],
 })

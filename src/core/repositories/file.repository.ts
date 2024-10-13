@@ -21,5 +21,9 @@ export class FileRepository {
     return this.fileRepository.findOne({ where: { id } });
   }
 
+  async delete(id: string): Promise<void> {
+    await this.fileRepository.delete(id);
+  }
+
   // Add more methods as needed
 }

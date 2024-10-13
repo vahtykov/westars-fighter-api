@@ -36,6 +36,23 @@ export class UserController {
     }
   }
 
+  @Patch('me')
+  @HttpCode(HttpStatus.OK)
+  async updateCurrentUser(@Req() req: any, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+    try {
+      const userId = req.user.userId;
+      return await this.userService.updateUser(userId, updateUserDto);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('User not found');
+      }
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(error.message);
+      }
+      throw new InternalServerErrorException('An error occurred while updating user data');
+    }
+  }
+
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {

@@ -24,10 +24,21 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    const updatedUser = await this.userRepository.update(userId, {
-      ...updateUserDto,
-      birthDate: updateUserDto.birthDate ? new Date(updateUserDto.birthDate) : null,
+    const updateData: Partial<User> = {};
+
+    // Copy all fields from updateUserDto to updateData, except birthDate
+    Object.keys(updateUserDto).forEach(key => {
+      if (key !== 'birthDate' && updateUserDto[key] !== undefined) {
+        updateData[key] = updateUserDto[key];
+      }
     });
+
+    // Handle birthDate separately
+    if (updateUserDto.birthDate !== undefined) {
+      updateData.birthDate = updateUserDto.birthDate ? new Date(updateUserDto.birthDate) : null;
+    }
+
+    const updatedUser = await this.userRepository.update(userId, updateData);
     return updatedUser;
   }
 
