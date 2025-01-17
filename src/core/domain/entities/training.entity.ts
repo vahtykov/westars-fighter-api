@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index, UpdateDateColumn, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
 import { User } from './user.entity';
 import { File } from './file.entity';
 import { TrainingLevel } from './training-level.entity';
 
 @Entity('trainings')
 @Index(['createdAt', 'id'], { unique: true })
-export class Training {
+export class Training extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
