@@ -20,6 +20,7 @@ import { TrainingController } from './presentation/controllers/training.controll
 import { TrainingService } from './application/services/training.service';
 import { TrainingRepository } from './core/repositories/training.repository';
 import { TrainingLevelRepository } from './core/repositories/training-level.repository';
+import { AdminPanelModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TrainingLevelRepository } from './core/repositories/training-level.repo
       }),
       inject: [ConfigService],
     }),
+    AdminPanelModule.forRootAsync(),
   ],
   controllers: [AuthController, UserController, FileUploadController, TrainingController],
   providers: [
