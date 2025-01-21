@@ -1,43 +1,45 @@
-// import React, { useState } from 'react'
+import React, { useState } from 'react'
 // import { Box, Label, Input, Button } from '@adminjs/design-system'
 
-// const UploadFile = (props) => {
-//   const [file, setFile] = useState(null)
+const UploadFile = async (props) => {
+  const { Box, Label, Input, Button } = await import('@adminjs/design-system');
 
-//   const handleUpload = async (e) => {
-//     e.preventDefault()
-//     if (!file) return
+  const [file, setFile] = useState(null)
 
-//     const formData = new FormData()
-//     formData.append('file', file)
-//     formData.append('mediaPathType', props.mediaPathType)
-//     formData.append('bucketName', process.env.AWS_BUCKET_NAME)
+  const handleUpload = async (e) => {
+    e.preventDefault()
+    if (!file) return
 
-//     try {
-//       const response = await fetch('/api/admin/upload', {
-//         method: 'POST',
-//         body: formData,
-//       })
-//       const data = await response.json()
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('mediaPathType', props.mediaPathType)
+    formData.append('bucketName', process.env.AWS_BUCKET_NAME)
 
-//       if (data.id) {
-//         props.onChange(data.id)
-//       }
-//     } catch (error) {
-//       console.error('Upload failed:', error)
-//     }
-//   }
+    try {
+      const response = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await response.json()
 
-//   return (
-//     <Box>
-//       <Label>Upload File</Label>
-//       <Input
-//         type="file"
-//         onChange={(e) => setFile(e.target.files[0])}
-//       />
-//       <Button onClick={handleUpload}>Upload</Button>
-//     </Box>
-//   )
-// }
+      if (data.id) {
+        props.onChange(data.id)
+      }
+    } catch (error) {
+      console.error('Upload failed:', error)
+    }
+  }
 
-// export default UploadFile
+  return (
+    <Box>
+      <Label>Upload File</Label>
+      <Input
+        type="file"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+      <Button onClick={handleUpload}>Upload</Button>
+    </Box>
+  )
+}
+
+export default UploadFile
