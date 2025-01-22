@@ -16,7 +16,7 @@
     "docker:infra:down": "docker compose -f docker-compose.infra.yml down",
     "docker:app": "docker compose -f docker-compose.app.yml up -d",
     "docker:app:down": "docker compose -f docker-compose.app.yml down",
-    "pm2:run": "pm2 delete fighter-api || true && pm2 start ecosystem.config.js",
+    "pm2:run": "pm2 start ecosystem.config.js",
     "pm2:logs": "pm2 logs fighter-api",
     "pm2:status": "pm2 status",
     "pm2:stop": "pm2 stop fighter-api && docker compose -f docker-compose.app.yml down",

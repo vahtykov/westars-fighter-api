@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
     name: 'fighter-api',
-    script: 'docker-compose',
-    args: '-f docker-compose.app.yml up',
+    script: '/usr/bin/docker',
+    args: 'compose -f docker-compose.app.yml up',
     interpreter: 'none',
     env: {
       NODE_ENV: 'development',
