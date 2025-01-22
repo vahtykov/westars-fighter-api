@@ -1,3 +1,4 @@
+name: fighter-infra
 version: '3.8'
 
 services:
@@ -22,7 +23,7 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 500M
+          memory: 250M
     networks:
       - app-network
 
@@ -31,4 +32,6 @@ volumes:
 
 networks:
   app-network:
+    name: fighter-network
     driver: bridge
+    external: false

@@ -1,12 +1,14 @@
 module.exports = {
   apps: [{
     name: 'fighter-api',
-    script: './dist/main.js',
-    instances: 'max',
-    exec_mode: 'cluster',
+    script: 'docker-compose',
+    args: '-f docker-compose.app.yml up',
+    interpreter: 'none',
+    env: {
+      NODE_ENV: 'development',
+    },
     max_memory_restart: '500M',
-    env_production: {
-      NODE_ENV: 'production'
-    }
+    restart_delay: 3000,
+    watch: false,
   }]
-}
+};
