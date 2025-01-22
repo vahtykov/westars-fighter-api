@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from 'typeorm';
 import { Training } from './training.entity';
 
 @Entity('training_levels')
-export class TrainingLevel {
+export class TrainingLevel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

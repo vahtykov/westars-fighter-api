@@ -4,10 +4,16 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-# Install build dependencies and rebuild bcrypt
-RUN apt-get update && apt-get install -y python3 make g++
-RUN npm install
-RUN npm rebuild bcrypt --build-from-source
+# Install build dependencies and NestJS CLI
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && npm install -g @nestjs/cli \
+    && npm install --include=dev \
+    && npm rebuild bcrypt --build-from-source \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY . .
 

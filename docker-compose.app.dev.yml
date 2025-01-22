@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - DB_HOST=${DB_HOST}
@@ -26,9 +26,8 @@ services:
     volumes:
       - node_modules:/usr/src/app/node_modules
       - sessions:/usr/src/app/sessions
-    depends_on:
-      postgres:
-        condition: service_healthy
+    networks:
+      - app-network
     deploy:
       resources:
         limits:
@@ -44,36 +43,8 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
-    networks:
-      - app-network
-    
-  postgres:
-    image: postgres:15.8-bullseye
-    restart: always
-    user: postgres
-    expose:
-      - "5432"
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      interval: 1s
-      timeout: 5s
-      retries: 10
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 500M
-    networks:
-      - app-network
 
 volumes:
-  postgres_data:
   node_modules:
   sessions:
 

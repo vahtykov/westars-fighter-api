@@ -1,9 +1,7 @@
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { Injectable } from '@nestjs/common';
-const imagemin = require('imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const imageminPngquant = require('imagemin-pngquant');
+import sharp from 'sharp';
 
 @Injectable()
 export class S3Service {
@@ -44,14 +42,23 @@ export class S3Service {
   }
 
   private async minifyImage(file: Buffer): Promise<Buffer> {
-    const minifiedBuffer = await imagemin.buffer(file, {
-      plugins: [
-        imageminMozjpeg({ quality: 75 }),
-        imageminPngquant({ quality: [0.6, 0.8] }),
-      ],
-    });
+    const image = sharp(file);
+    const metadata = await image.metadata();
 
-    return minifiedBuffer;
+    if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+      return await image
+        .jpeg({ quality: 75 })
+        .toBuffer();
+    }
+
+    if (metadata.format === 'png') {
+      return await image
+        .png({ quality: 75 })
+        .toBuffer();
+    }
+
+    // Если формат не поддерживается, возвращаем оригинал
+    return file;
   }
 
   private getContentType(fileName: string): string {
