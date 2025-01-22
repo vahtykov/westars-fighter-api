@@ -9,7 +9,7 @@ export class AdminUploadController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @Body('mediaPathType') mediaPathType: string,
     @Body('bucketName') bucketName: string,
   ) {

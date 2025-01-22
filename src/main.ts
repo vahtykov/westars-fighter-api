@@ -8,11 +8,18 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
-  // Сессия для всех запросов
+  // Сессия для всех запросов с улучшенной конфигурацией
   app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET || 'your-strong-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    name: 'fighter.sid', // кастомное имя для cookie
+    cookie: {
+      httpOnly: true, // защита от XSS
+      secure: process.env.NODE_ENV === 'production', // HTTPS только в production
+      maxAge: 160 * 60 * 60 * 1000, // 24 часа
+      sameSite: 'lax' // защита от CSRF
+    }
   }));
 
   // Formidable только для админки

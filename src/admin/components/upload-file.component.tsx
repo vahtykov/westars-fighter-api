@@ -5,6 +5,7 @@ const UploadFile = async (props) => {
   const { Box, Label, Input, Button } = await import('@adminjs/design-system');
 
   const [file, setFile] = useState(null)
+  const [uploadStatus, setUploadStatus] = useState('')
 
   const handleUpload = async (e) => {
     e.preventDefault()
@@ -16,6 +17,7 @@ const UploadFile = async (props) => {
     formData.append('bucketName', process.env.AWS_BUCKET_NAME)
 
     try {
+      setUploadStatus('Uploading...')
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
         body: formData,
@@ -24,20 +26,23 @@ const UploadFile = async (props) => {
 
       if (data.id) {
         props.onChange(data.id)
+        setUploadStatus('Upload successful')
       }
     } catch (error) {
       console.error('Upload failed:', error)
+      setUploadStatus('Upload failed')
     }
   }
 
   return (
     <Box>
-      <Label>Upload File</Label>
+      <Label>{props.label || 'Upload File'}</Label>
       <Input
         type="file"
         onChange={(e) => setFile(e.target.files[0])}
       />
       <Button onClick={handleUpload}>Upload</Button>
+      {uploadStatus && <p>{uploadStatus}</p>}
     </Box>
   )
 }

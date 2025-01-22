@@ -10,12 +10,6 @@ RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
-    autoconf \
-    automake \
-    libtool \
-    nasm \
-    pkg-config \
-    libpng-dev \
     && npm install \
     && npm rebuild bcrypt --build-from-source
 
@@ -33,15 +27,13 @@ RUN npm install pm2 -g
 
 COPY package*.json ./
 
-# Install production dependencies and required packages
+# Install production dependencies including session-file-store
 RUN apt-get update && apt-get install -y \
-    autoconf \
-    automake \
-    libtool \
-    nasm \
-    pkg-config \
-    libpng-dev \
-    && npm ci --only=production \
+    python3 \
+    make \
+    g++ \
+    && npm ci \
+    && npm rebuild bcrypt --build-from-source \
     && npm cache clean --force \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -52,6 +44,12 @@ COPY --from=builder /usr/src/app/dist ./dist
 # Create PM2 ecosystem file
 COPY ecosystem.config.js .
 
+# Create required directories with proper permissions
+RUN mkdir sessions .adminjs && \
+    chown -R node:node sessions .adminjs
+
 EXPOSE 3000
+
+USER node
 
 CMD ["pm2-runtime", "ecosystem.config.js"]

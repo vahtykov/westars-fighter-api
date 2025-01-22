@@ -37,7 +37,7 @@ export class FileUploadController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @Body('bucketName') bucketName: string,
     @Body('mediaPathType') mediaPathType: string,
     @UserDecorator() user: User
