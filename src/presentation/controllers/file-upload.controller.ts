@@ -40,7 +40,8 @@ export class FileUploadController {
     @UploadedFile() file: any,
     @Body('bucketName') bucketName: string,
     @Body('mediaPathType') mediaPathType: string,
-    @UserDecorator() user: User
+    @UserDecorator() user: User,
+    @Body('originalName') originalName?: string,
   ) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
@@ -55,15 +56,17 @@ export class FileUploadController {
     }
 
     try {
+      const fileOriginalName = originalName ? decodeURIComponent(originalName) : file.originalname;
+      
       const pathTypeSetting = mediaPathTypes[mediaPathType];
       const filePath = pathTypeSetting.userDependent
-        ? `${pathTypeSetting.path}/${user.id}/${Date.now()}-${file.originalname}`
-        : `${pathTypeSetting.path}/${Date.now()}-${file.originalname}`;
+        ? `${pathTypeSetting.path}/${user.id}/${Date.now()}-${fileOriginalName}`
+        : `${pathTypeSetting.path}/${Date.now()}-${fileOriginalName}`;
 
       const { url, key, size } = await this.s3Service.uploadFile(file.buffer, filePath, bucketName);
       
       const fileEntity = await this.fileRepository.create({
-        originalName: file.originalname,
+        originalName: fileOriginalName,
         mimeType: file.mimetype,
         size: size,
         bucketName: bucketName,
@@ -76,7 +79,11 @@ export class FileUploadController {
         id: fileEntity.id,
         url: fileEntity.url,
         originalName: fileEntity.originalName,
-        size: fileEntity.size
+        size: fileEntity.size,
+        key: fileEntity.key,
+        bucketName: fileEntity.bucketName,
+        mimeType: fileEntity.mimeType,
+        uploadedAt: fileEntity.uploadedAt,
       };
     } catch (error) {
       throw new BadRequestException('File upload failed');

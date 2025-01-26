@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtRefreshStrategy } from './infrastructure/auth/jwt-refresh.strategy';
 
 import { AuthController } from './presentation/controllers/auth.controller';
+import { AdminAuthController } from './presentation/controllers/admin-auth.controller';
 import { AuthService } from './application/services/auth.service';
 import { JwtStrategy } from './infrastructure/auth/jwt.strategy';
 import { JwtAuthService } from './infrastructure/auth/jwt.service';
@@ -20,7 +21,6 @@ import { TrainingController } from './presentation/controllers/training.controll
 import { TrainingService } from './application/services/training.service';
 import { TrainingRepository } from './core/repositories/training.repository';
 import { TrainingLevelRepository } from './core/repositories/training-level.repository';
-import { AdminJsModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -31,13 +31,12 @@ import { AdminJsModule } from './admin/admin.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_SECRET'),
-        signOptions: { expiresIn: '5h' },
+        signOptions: { expiresIn: '30d' },
       }),
       inject: [ConfigService],
     }),
-    AdminJsModule.forRootAsync(),
   ],
-  controllers: [AuthController, UserController, FileUploadController, TrainingController],
+  controllers: [AuthController, AdminAuthController, UserController, FileUploadController, TrainingController],
   providers: [
     AuthService,
     UserService,

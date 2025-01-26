@@ -46,6 +46,9 @@ export class User extends BaseEntity {
   @OneToMany('File', 'user')
   files: File[];
 
+  @Column({ default: false })
+  isAdmin: boolean;
+
   @BeforeInsert()
   async hashPassword() {
     const salt = await bcrypt.genSalt(12);
@@ -53,6 +56,10 @@ export class User extends BaseEntity {
   }
 
   async comparePassword(attempt: string): Promise<boolean> {
+    if (!this.password || !attempt) {
+      return false;
+    }
+
     return bcrypt.compare(attempt, this.password);
   }
 

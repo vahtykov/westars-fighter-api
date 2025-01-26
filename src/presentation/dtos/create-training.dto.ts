@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateTrainingDto {
   @IsString()
@@ -20,5 +20,7 @@ export class CreateTrainingDto {
   @IsNotEmpty()
   videoFileId: string;
 
+  @IsNumber()
+  @IsOptional()
   levelId?: number;
 }

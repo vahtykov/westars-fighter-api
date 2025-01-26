@@ -42,6 +42,14 @@ export class S3Service {
   }
 
   private async minifyImage(file: Buffer): Promise<Buffer> {
+    // Проверяем первые байты файла для определения типа
+    const fileType = await this.getFileType(file);
+    
+    // Если это не изображение, возвращаем оригинальный файл
+    if (!['image/jpeg', 'image/jpg', 'image/png'].includes(fileType)) {
+      return file;
+    }
+
     const image = sharp(file);
     const metadata = await image.metadata();
 
@@ -57,8 +65,24 @@ export class S3Service {
         .toBuffer();
     }
 
-    // Если формат не поддерживается, возвращаем оригинал
     return file;
+  }
+
+  private async getFileType(buffer: Buffer): Promise<string> {
+    // Проверяем сигнатуры файлов по первым байтам
+    if (buffer.length < 4) return 'unknown';
+
+    // JPEG начинается с FF D8 FF
+    if (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF) {
+      return 'image/jpeg';
+    }
+
+    // PNG начинается с 89 50 4E 47
+    if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+      return 'image/png';
+    }
+
+    return 'unknown';
   }
 
   private getContentType(fileName: string): string {

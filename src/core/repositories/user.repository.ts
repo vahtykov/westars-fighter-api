@@ -43,6 +43,7 @@ export class UserRepository implements IUserRepository {
         birthDate: true,
         aboutText: true,
         lastActivityAt: true,
+        isAdmin: true,
       } : {},
     });
   }

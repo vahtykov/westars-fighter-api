@@ -13,11 +13,11 @@ export class JwtAuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: '5h',
+        expiresIn: '360d',
       }),
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: '7d',
+        expiresIn: '400d',
       }),
     ]);
 
@@ -41,6 +41,46 @@ export class JwtAuthService {
       return payload;
     } catch (error) {
       throw new UnauthorizedException('Access token is invalid or expired');
+    }
+  }
+
+  async generateAdminTokens(payload: any) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(
+        { ...payload, type: 'access' },
+        {
+          secret: this.configService.get<string>('ADMIN_JWT_SECRET'),
+          expiresIn: '360d', // Более длительный срок для админов
+        }
+      ),
+      this.jwtService.signAsync(
+        { ...payload, type: 'refresh' },
+        {
+          secret: this.configService.get<string>('ADMIN_JWT_REFRESH_SECRET'),
+          expiresIn: '400d',
+        }
+      ),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async verifyAdminToken(token: string): Promise<any> {
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('ADMIN_JWT_SECRET'),
+      });
+      
+      if (payload.issuedFor !== 'admin-panel') {
+        throw new UnauthorizedException('Invalid token type');
+      }
+
+      return payload;
+    } catch (error) {
+      throw new UnauthorizedException('Admin token is invalid or expired');
     }
   }
 }
