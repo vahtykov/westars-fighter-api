@@ -7,6 +7,15 @@ import * as express from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // Add middleware to handle OPTIONS requests before CORS
+  app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
+    }
+    next();
+  });
+
   // Enable CORS with specific configuration
   app.enableCors({
     origin: ['http://185.200.242.90:3005', 'http://localhost', 'http://127.0.0.1'],
