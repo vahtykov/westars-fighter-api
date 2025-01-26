@@ -18,12 +18,8 @@ async function bootstrap() {
 
   // Enable CORS with specific configuration
   app.enableCors({
-    origin: ['http://185.200.242.90', 'http://localhost', 'http://127.0.0.1'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    origin: true, // разрешает все origins для тестирования
+    credentials: true
   });
 
   app.useGlobalPipes(new ValidationPipe({
