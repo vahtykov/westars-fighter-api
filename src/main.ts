@@ -17,8 +17,8 @@ async function bootstrap() {
   //   next();
   // });
 
-  app.use(json({ limit: '100mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+  // app.use(json({ limit: '100mb' }));
+  // app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
   // Enable CORS with specific configuration
   app.enableCors({

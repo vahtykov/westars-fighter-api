@@ -86,7 +86,7 @@ export class FileUploadController {
         uploadedAt: fileEntity.uploadedAt,
       };
     } catch (error) {
-      throw new BadRequestException('File upload failed');
+      throw new BadRequestException('File upload failed', error);
     }
   }
 }

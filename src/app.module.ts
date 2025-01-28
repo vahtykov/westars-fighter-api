@@ -31,7 +31,9 @@ import { TrainingLevelRepository } from './core/repositories/training-level.repo
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_SECRET'),
-        signOptions: { expiresIn: '30d' },
+        signOptions: {
+          // expiresIn: '30d'
+        },
       }),
       inject: [ConfigService],
     }),
