@@ -5,7 +5,7 @@ module.exports = {
     args: 'compose -f docker-compose.app.yml up',
     interpreter: 'none',
     env: {
-      NODE_ENV: 'development',
+      NODE_ENV: 'production',
     },
     max_memory_restart: '500M',
     restart_delay: 3000,
