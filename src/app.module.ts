@@ -32,7 +32,7 @@ import { TrainingLevelRepository } from './core/repositories/training-level.repo
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_SECRET'),
         signOptions: {
-          // expiresIn: '30d'
+          expiresIn: '360d'
         },
       }),
       inject: [ConfigService],

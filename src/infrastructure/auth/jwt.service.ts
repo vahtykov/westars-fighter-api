@@ -13,11 +13,11 @@ export class JwtAuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-        // expiresIn: '360d',
+        expiresIn: '360d',
       }),
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-        // expiresIn: '400d',
+        expiresIn: '400d',
       }),
     ]);
 
@@ -50,14 +50,14 @@ export class JwtAuthService {
         { ...payload, type: 'access' },
         {
           secret: this.configService.get<string>('ADMIN_JWT_SECRET'),
-          // expiresIn: '360d', // Более длительный срок для админов
+          expiresIn: '360d', // Более длительный срок для админов
         }
       ),
       this.jwtService.signAsync(
         { ...payload, type: 'refresh' },
         {
           secret: this.configService.get<string>('ADMIN_JWT_REFRESH_SECRET'),
-          // expiresIn: '400d',
+          expiresIn: '400d',
         }
       ),
     ]);
