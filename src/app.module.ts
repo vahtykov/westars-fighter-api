@@ -21,6 +21,8 @@ import { TrainingController } from './presentation/controllers/training.controll
 import { TrainingService } from './application/services/training.service';
 import { TrainingRepository } from './core/repositories/training.repository';
 import { TrainingLevelRepository } from './core/repositories/training-level.repository';
+import { MealController } from './presentation/controllers/meal.controller';
+import { MealService } from './application/services/meal.service';
 
 @Module({
   imports: [
@@ -38,11 +40,12 @@ import { TrainingLevelRepository } from './core/repositories/training-level.repo
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, AdminAuthController, UserController, FileUploadController, TrainingController],
+  controllers: [AuthController, AdminAuthController, UserController, FileUploadController, TrainingController, MealController],
   providers: [
     AuthService,
     UserService,
     TrainingService,
+    MealService,
     S3Service,
     FileRepository,
     JwtStrategy,
