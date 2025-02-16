@@ -12,13 +12,13 @@ export class MealService {
       "breakfast": [
           {
               "id": 1,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image-min.png",
               "name": "Чиа пудинг с матчей",
               "ccal": 140
           },
           {
               "id": 2,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image 106-min.png",
               "name": "Каша овсяная",
               "ccal": 180
           }
@@ -26,13 +26,13 @@ export class MealService {
       "lunch": [
           {
               "id": 1,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image (1)-min.png",
               "name": "Курица кацу с карри",
               "ccal": 140
           },
           {
               "id": 2,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image 108-min.png",
               "name": "Борщ мясной",
               "ccal": 350
           }
@@ -40,7 +40,7 @@ export class MealService {
       "dinner": [
           {
               "id": 1,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image-min.png",
               "name": "Запечённая курица с апельсином",
               "ccal": 250
           }
@@ -48,7 +48,7 @@ export class MealService {
       "snack": [
           {
               "id": 1,
-              "previewUrl": "https://...",
+              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/meals/image 106-min.png",
               "name": "Салат со свеклой, нутом, йогурцом и фетой",
               "ccal": 200
           }
