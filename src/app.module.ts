@@ -23,6 +23,12 @@ import { TrainingRepository } from './core/repositories/training.repository';
 import { TrainingLevelRepository } from './core/repositories/training-level.repository';
 import { MealController } from './presentation/controllers/meal.controller';
 import { MealService } from './application/services/meal.service';
+import { GymController } from './presentation/controllers/gym.controller';
+import { GymService } from './application/services/gym.service';
+import { EquipmentController } from './presentation/controllers/equipment.controller';
+import { EquipmentService } from './application/services/equipment.service';
+import { MotivationService } from './application/services/motivation.service';
+import { MotivationController } from './presentation/controllers/motivation.controller';
 
 @Module({
   imports: [
@@ -40,12 +46,25 @@ import { MealService } from './application/services/meal.service';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, AdminAuthController, UserController, FileUploadController, TrainingController, MealController],
+  controllers: [
+    AuthController,
+    AdminAuthController,
+    UserController,
+    FileUploadController,
+    TrainingController,
+    MealController,
+    GymController,
+    EquipmentController,
+    MotivationController,
+  ],
   providers: [
     AuthService,
     UserService,
     TrainingService,
     MealService,
+    GymService,
+    EquipmentService,
+    MotivationService,
     S3Service,
     FileRepository,
     JwtStrategy,
