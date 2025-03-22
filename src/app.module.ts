@@ -29,6 +29,18 @@ import { EquipmentController } from './presentation/controllers/equipment.contro
 import { EquipmentService } from './application/services/equipment.service';
 import { MotivationService } from './application/services/motivation.service';
 import { MotivationController } from './presentation/controllers/motivation.controller';
+import { MealRepository } from './core/repositories/meal.repository';
+import { MealCategoryRepository } from './core/repositories/meal-category.repository';
+import { DailyMealRepository } from './core/repositories/daily-meal.repository';
+import { MotivationRepository } from './core/repositories/motivation.repository';
+import { GymRepository } from './core/repositories/gym.repository';
+import { EquipmentRepository } from './core/repositories/equipment.repository';
+import { TrainingTaskCategoryRepository } from './core/repositories/training-task-category.repository';
+import { TrainingTaskRunningRepository } from './core/repositories/training-task-running.repository';
+import { TrainingTaskRepository } from './core/repositories/training-task.repository';
+import { UserTaskCategoryRepository } from './core/repositories/user-task-category.repository';
+import { TrainingTaskController } from './presentation/controllers/training-task.controller';
+import { TrainingTaskService } from './application/services/training-task.service';
 
 @Module({
   imports: [
@@ -56,6 +68,7 @@ import { MotivationController } from './presentation/controllers/motivation.cont
     GymController,
     EquipmentController,
     MotivationController,
+    TrainingTaskController,
   ],
   providers: [
     AuthService,
@@ -65,6 +78,7 @@ import { MotivationController } from './presentation/controllers/motivation.cont
     GymService,
     EquipmentService,
     MotivationService,
+    TrainingTaskService,
     S3Service,
     FileRepository,
     JwtStrategy,
@@ -81,6 +95,46 @@ import { MotivationController } from './presentation/controllers/motivation.cont
     {
       provide: 'ITrainingLevelRepository',
       useClass: TrainingLevelRepository,
+    },
+    {
+      provide: 'IMealRepository',
+      useClass: MealRepository,
+    },
+    {
+      provide: 'IMealCategoryRepository',
+      useClass: MealCategoryRepository,
+    },
+    {
+      provide: 'IDailyMealRepository',
+      useClass: DailyMealRepository,
+    },
+    {
+      provide: 'IMotivationRepository',
+      useClass: MotivationRepository,
+    },
+    {
+      provide: 'IGymRepository',
+      useClass: GymRepository,
+    },
+    {
+      provide: 'IEquipmentRepository',
+      useClass: EquipmentRepository,
+    },
+    {
+      provide: 'ITrainingTaskCategoryRepository',
+      useClass: TrainingTaskCategoryRepository,
+    },
+    {
+      provide: 'IUserTaskCategoryRepository',
+      useClass: UserTaskCategoryRepository,
+    },
+    {
+      provide: 'ITrainingTaskRepository',
+      useClass: TrainingTaskRepository,
+    },
+    {
+      provide: 'ITrainingTaskRunningRepository',
+      useClass: TrainingTaskRunningRepository,
     },
   ],
 })

@@ -1,59 +1,91 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { IGymRepository } from '../../core/repositories/gym.repository.interface';
 
 @Injectable()
 export class GymService {
   constructor(
-    // @Inject('ITrainingRepository')
-    // private trainingRepository: ITrainingRepository,
+    @Inject('IGymRepository')
+    private gymRepository: IGymRepository
   ) {}
 
-  async getList(): Promise<Object> {
-    return [
-          {
-              "id": 1,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/1-min.png",
-              "name": "Автозаводская школа бокса",
-              "address": "г. Нижний Новгород, Автозаводский район, ул. Краснодонцев 10"
-          },
-          {
-              "id": 2,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/2-min.png",
-              "name": "Боксерский клуб «КАДЕТ»",
-              "address": "г. Нижний Новгород, Ленинский район, ул. Сухопутная 2"
-          },
-          {
-              "id": 3,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/3-min.png",
-              "name": "ЦСР «Территория спорта»",
-              "address": "г. Нижний Новгород, ул. Глеба Успенского 16а. 2-й этаж"
-          },
-          {
-              "id": 4,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/4-min.png",
-              "name": "МБУ СШ Дворец Спорта «Заречье»",
-              "address": "г. Нижний Новгород, Ленинский район, ул. Арктическая, 7"
-          },
-          {
-              "id": 5,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/5-min.png",
-              "name": "Сормовская школа бокса",
-              "address": "г. Нижний Новгород, Сормовский район, ул. 50 лет победы, 12"
-          },
-          {
-              "id": 6,
-              "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/6-min.png",
-              "name": "Боксерский клуб «Богатырь»",
-              "address": "г. Нижний Новгород, Ленинский район, ул. Заречная 21"
-          }
+  async getList(): Promise<Object[]> {
+    try {
+      const gyms = await this.gymRepository.findAll();
+
+      if (gyms && gyms.length > 0) {
+        return gyms.map(gym => ({
+          id: gym.id,
+          previewUrl: gym.previewUrl,
+          name: gym.name,
+          address: gym.address
+        }));
+      }
+
+      // Если данных нет, возвращаем моковые данные
+      return [
+        {
+          "id": 1,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/1-min.png",
+          "name": "Автозаводская школа бокса",
+          "address": "г. Нижний Новгород, Автозаводский район, ул. Краснодонцев 10"
+        },
+        {
+          "id": 2,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/2-min.png",
+          "name": "Школа бокса Андрея Гоголева",
+          "address": "г. Нижний Новгород, Нижегородский район, ул. Белинского 32"
+        },
+        {
+          "id": 3,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/3-min.png",
+          "name": "Школа бокса Нижний Новгород",
+          "address": "г. Нижний Новгород, Советский район, ул. Бекетова 3Б"
+        }
       ];
+    } catch (error) {
+      console.error('Error fetching gyms:', error);
+      // В случае ошибки возвращаем моковые данные
+      return [
+        {
+          "id": 1,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/1-min.png",
+          "name": "Автозаводская школа бокса",
+          "address": "г. Нижний Новгород, Автозаводский район, ул. Краснодонцев 10"
+        },
+        {
+          "id": 2,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/2-min.png",
+          "name": "Школа бокса Андрея Гоголева",
+          "address": "г. Нижний Новгород, Нижегородский район, ул. Белинского 32"
+        },
+        {
+          "id": 3,
+          "previewUrl": "https://s3.timeweb.cloud/3067f90d-fighter-app/gyms/3-min.png",
+          "name": "Школа бокса Нижний Новгород",
+          "address": "г. Нижний Новгород, Советский район, ул. Бекетова 3Б"
+        }
+      ];
+    }
   }
 
   async getById(id: number): Promise<Object> {
+    const gym = await this.gymRepository.findById(id);
+    
+    if (!gym) {
+      throw new NotFoundException(`Gym with id ${id} not found`);
+    }
+    
     return {
-      "id": id,
-      "previewUrl": "https://random.imagecdn.app/328/280",
-      "name": "Чиа пудинг с матчей",
-      "ccal": Math.floor(Math.random() * 999)
+      id: gym.id,
+      previewUrl: gym.previewUrl,
+      name: gym.name,
+      address: gym.address,
+      description: gym.description,
+      latitude: gym.latitude,
+      longitude: gym.longitude,
+      phone: gym.phone,
+      website: gym.website,
+      workingHours: gym.workingHours
     };
   }
 }

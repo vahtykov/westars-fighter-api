@@ -1,36 +1,36 @@
-// import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index, UpdateDateColumn, ManyToOne, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
+import { MealCategory } from './meal-category.entity';
 
-// @Entity('meals')
-// @Index(['createdAt', 'id'], { unique: true })
-// @Index(['type'])
-// export class Meal extends BaseEntity {
-//   @PrimaryGeneratedColumn()
-//   id: number;
+@Entity('meals')
+export class Meal extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-//   @Column({ length: 255 })
-//   name: string;
+  @Column({ length: 255 })
+  name: string;
 
-//   @ManyToOne(() => File)
-//   previewFile: File;
+  @Column({ length: 255 })
+  previewUrl: string;
 
-//   @Column({ nullable: true })
-//   previewFileId: string;
+  @Column()
+  ccal: number;
 
-//   @Column({ length: 255, nullable: true })
-//   previewUrl: string;
+  @Column({ nullable: true, type: 'text' })
+  description: string;
 
-//   @Column({ type: 'smallint' })
-//   ccal: number;
+  @Column({ nullable: true })
+  proteins: number;
 
-//   @Column({ nullable: true, type: 'text' })
-//   fullText: string;
+  @Column({ nullable: true })
+  fats: number;
 
-//   @Column({ length: 20 })
-//   type: string;
+  @Column({ nullable: true })
+  carbs: number;
 
-//   @CreateDateColumn({ type: 'timestamp with time zone' })
-//   createdAt: Date;
+  @ManyToOne(() => MealCategory, category => category.meals)
+  @JoinColumn({ name: 'categoryId' })
+  category: MealCategory;
 
-//   @UpdateDateColumn({ type: 'timestamp with time zone' })
-//   updatedAt: Date;
-// }
+  @Column()
+  categoryId: number;
+}
