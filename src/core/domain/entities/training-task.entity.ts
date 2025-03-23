@@ -35,7 +35,7 @@ export class TrainingTask extends BaseEntity {
   @Column({ length: 255, nullable: true })
   imageUrl: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int', nullable: true })
   durationMinutes: number;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })

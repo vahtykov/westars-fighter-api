@@ -13,10 +13,10 @@ export class TrainingTaskRunning extends BaseEntity {
   @Column()
   userId: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp with time zone' })
   startTrainingTime: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp with time zone', nullable: true })
   endTrainingTime: Date;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
