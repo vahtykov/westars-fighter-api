@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { File } from './file.entity';
 
 @Entity('gyms')
 export class Gym extends BaseEntity {
@@ -7,6 +8,12 @@ export class Gym extends BaseEntity {
 
   @Column({ length: 255 })
   name: string;
+
+  @ManyToOne(() => File)
+  previewFile: File;
+
+  @Column({ nullable: true })
+  previewFileId: string;
 
   @Column({ length: 255 })
   previewUrl: string;
@@ -31,4 +38,10 @@ export class Gym extends BaseEntity {
 
   @Column({ nullable: true, length: 255 })
   workingHours: string;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

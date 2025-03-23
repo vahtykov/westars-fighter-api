@@ -25,7 +25,6 @@ export class MotivationRepository implements IMotivationRepository {
 
   async findToday(): Promise<Motivation | null> {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     return this.findByDate(today);
   }
 }

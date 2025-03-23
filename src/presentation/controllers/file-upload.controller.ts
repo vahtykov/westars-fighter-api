@@ -23,6 +23,26 @@ const mediaPathTypes: Record<string, { path: string, userDependent: boolean }> =
   'task_preview': {
     path: 'tasks/previews',
     userDependent: false
+  },
+  'task_category': {
+    path: 'tasks/category/previews',
+    userDependent: false
+  },
+  'task_video': {
+    path: 'tasks/videos',
+    userDependent: false
+  },
+  'meal_preview': {
+    path: 'meals/previews',
+    userDependent: false
+  },
+  'gym_preview': {
+    path: 'gyms/previews',
+    userDependent: false
+  },
+  'equipment_preview': {
+    path: 'equipments/previews',
+    userDependent: false
   }
 };
 

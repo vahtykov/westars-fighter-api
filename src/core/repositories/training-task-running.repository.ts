@@ -36,4 +36,14 @@ export class TrainingTaskRunningRepository implements ITrainingTaskRunningReposi
       }
     });
   }
+
+  async create(data: Partial<TrainingTaskRunning>): Promise<TrainingTaskRunning> {
+    const running = this.runningRepository.create(data);
+    return this.runningRepository.save(running);
+  }
+
+  async update(id: number, data: Partial<TrainingTaskRunning>): Promise<TrainingTaskRunning> {
+    await this.runningRepository.update(id, data);
+    return this.findById(id);
+  }
 }

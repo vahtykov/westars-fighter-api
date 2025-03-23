@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { TrainingTask } from './training-task.entity';
 
@@ -18,6 +18,12 @@ export class TrainingTaskRunning extends BaseEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   endTrainingTime: Date;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })

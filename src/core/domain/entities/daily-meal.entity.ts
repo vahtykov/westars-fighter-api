@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, BaseEntity, UpdateDateColumn } from 'typeorm';
 import { Meal } from './meal.entity';
 import { MealCategory } from './meal-category.entity';
 
@@ -26,4 +26,10 @@ export class DailyMeal extends BaseEntity {
 
   @Column({ default: 1 })
   sortOrder: number;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

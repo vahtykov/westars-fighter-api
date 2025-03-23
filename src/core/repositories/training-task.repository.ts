@@ -30,4 +30,18 @@ export class TrainingTaskRepository implements ITrainingTaskRepository {
       relations: ['category']
     });
   }
+
+  async create(taskData: Partial<TrainingTask>): Promise<TrainingTask> {
+    const task = this.taskRepository.create(taskData);
+    return this.taskRepository.save(task);
+  }
+
+  async update(id: number, taskData: Partial<TrainingTask>): Promise<TrainingTask> {
+    await this.taskRepository.update(id, taskData);
+    return this.findById(id);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.taskRepository.delete(id);
+  }
 }

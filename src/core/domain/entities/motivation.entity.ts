@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 
 @Entity('motivations')
 export class Motivation extends BaseEntity {
@@ -10,4 +10,10 @@ export class Motivation extends BaseEntity {
 
   @Column({ type: 'date', unique: true })
   date: Date;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

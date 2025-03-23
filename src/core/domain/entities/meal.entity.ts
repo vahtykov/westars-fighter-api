@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { MealCategory } from './meal-category.entity';
+import { File } from './file.entity';
 
 @Entity('meals')
 export class Meal extends BaseEntity {
@@ -8,6 +9,12 @@ export class Meal extends BaseEntity {
 
   @Column({ length: 255 })
   name: string;
+
+  @ManyToOne(() => File)
+  previewFile: File;
+
+  @Column({ nullable: true })
+  previewFileId: string;
 
   @Column({ length: 255 })
   previewUrl: string;
@@ -26,6 +33,12 @@ export class Meal extends BaseEntity {
 
   @Column({ nullable: true })
   carbs: number;
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 
   @ManyToOne(() => MealCategory, category => category.meals)
   @JoinColumn({ name: 'categoryId' })
