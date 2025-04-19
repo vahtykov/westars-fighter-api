@@ -29,13 +29,17 @@ export class TrainingTaskController {
   async getTasksByCategory(@Param('id') categoryId: number): Promise<Object> {
     try {
       const tasks = await this.trainingTaskService.getTasksByCategory(categoryId);
+      const category = await this.trainingTaskService.getCategoryById(categoryId);
       
       return {
-        title: 'Тренировки',
+        title: category.name,
         tasks
       };
     } catch (error) {
       console.log(error);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
       throw new InternalServerErrorException('An error occurred while fetching tasks');
     }
   }

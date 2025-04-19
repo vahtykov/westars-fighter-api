@@ -10,6 +10,9 @@ export class TrainingTaskCategory extends BaseEntity {
   @Column({ length: 255 })
   name: string;
 
+  @Column({ type: 'smallint', nullable: true })
+  order: number;
+
   @ManyToOne(() => File)
   imageFile: File;
 

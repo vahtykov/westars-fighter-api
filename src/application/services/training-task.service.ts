@@ -23,12 +23,29 @@ export class TrainingTaskService {
     
     const userCategoryIds = userCategories.map(uc => uc.taskCategoryId);
     
-    return categories.map(category => ({
+    return categories
+      .map(category => ({
+        id: category.id,
+        name: category.name,
+        imageUrl: category.imageUrl,
+        order: category.order,
+        isLocked: !userCategoryIds.includes(category.id)
+      }))
+      .sort((a, b) => (b.order ?? 0) - (a.order ?? 0));
+  }
+
+  async getCategoryById(categoryId: number): Promise<any> {
+    const category = await this.categoryRepository.findById(categoryId);
+    if (!category) {
+      throw new NotFoundException(`Training task category with id ${categoryId} not found`);
+    }
+    
+    return {
       id: category.id,
       name: category.name,
       imageUrl: category.imageUrl,
-      isLocked: !userCategoryIds.includes(category.id)
-    }));
+      order: category.order
+    };
   }
 
   async getTasksByCategory(categoryId: number): Promise<any[]> {
