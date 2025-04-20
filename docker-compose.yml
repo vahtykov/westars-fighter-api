@@ -1,0 +1,47 @@
+name: fighter-api-app
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
+      - ADMIN_JWT_REFRESH_SECRET=${ADMIN_JWT_REFRESH_SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_SCHEMA=${DB_SCHEMA}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ENDPOINT=${AWS_ENDPOINT}
+      - S3_HOST=${S3_HOST}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - DEV_SYNC_MODELS=${DEV_SYNC_MODELS}
+      - SQL_LOGGING_ENABLED=${SQL_LOGGING_ENABLED}
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+    working_dir: /usr/src/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
+
+volumes:
+  node_modules:
