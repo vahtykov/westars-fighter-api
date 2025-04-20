@@ -130,4 +130,32 @@ export class TrainingTaskService {
       durationMinutes: Math.round((updatedRunning.endTrainingTime.getTime() - updatedRunning.startTrainingTime.getTime()) / 60000)
     };
   }
+
+  async getTrainingHistory(userId: string, taskId: number): Promise<any[]> {
+    // Проверяем существование задания
+    const task = await this.taskRepository.findById(taskId);
+    if (!task) {
+      throw new NotFoundException(`Training task with id ${taskId} not found`);
+    }
+    
+    // Получаем историю запусков тренировки
+    const runnings = await this.runningRepository.findByUserAndTask(userId, taskId);
+    
+    return runnings.map(running => ({
+      id: running.id,
+      taskId: running.trainingTaskId,
+      startTime: running.startTrainingTime,
+      endTime: running.endTrainingTime,
+      duration: running.endTrainingTime 
+        ? (() => {
+            const diffMilliseconds = running.endTrainingTime.getTime() - running.startTrainingTime.getTime();
+            const totalSeconds = Math.floor(diffMilliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          })()
+        : null,
+      isCompleted: !!running.endTrainingTime
+    }));
+  }
 }

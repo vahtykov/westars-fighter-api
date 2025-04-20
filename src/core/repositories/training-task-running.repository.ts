@@ -23,7 +23,8 @@ export class TrainingTaskRunningRepository implements ITrainingTaskRunningReposi
   async findByUserAndTask(userId: string, taskId: number): Promise<TrainingTaskRunning[]> {
     return this.runningRepository.find({
       where: { userId, trainingTaskId: taskId },
-      order: { startTrainingTime: 'DESC' }
+      order: { startTrainingTime: 'DESC' },
+      take: 20,
     });
   }
 
